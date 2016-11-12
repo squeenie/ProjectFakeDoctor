@@ -32,7 +32,7 @@ bool AIEphysApp::startup()
 	m_PhysScene = new PhysScene(-9.8, 1.0 / 60.0);
 
 	ptrAnim = new Animation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f);
-	ptrAnim->SetLoop(false);
+	ptrAnim->SetLoop(true);
 
 	return true;
 }
