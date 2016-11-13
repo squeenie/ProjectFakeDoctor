@@ -15,6 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AIEphys</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>FakeDoctor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -92,7 +93,9 @@
     <ClCompile Include="AIEphysApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\BaseEntity.cpp" />
     <ClCompile Include="src\Cirlce.cpp" />
+    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\PhsysicsObject.cpp" />
     <ClCompile Include="src\PhysScene.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
@@ -101,11 +104,15 @@
   <ItemGroup>
     <ClInclude Include="AIEphysApp.h" />
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\BaseEntity.h" />
     <ClInclude Include="src\Circle.h" />
+    <ClInclude Include="src\Emitter.h" />
     <ClInclude Include="src\Force.h" />
+    <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\PhysicsObject.h" />
     <ClInclude Include="src\PhysScene.h" />
     <ClInclude Include="src\RigidBody.h" />
+    <ClInclude Include="src\TestSoldier.h" />
     <ClInclude Include="src\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

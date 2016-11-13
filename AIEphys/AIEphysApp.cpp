@@ -13,6 +13,16 @@ bool bSpawned = false;
 
 Animation *ptrAnim;
 
+/*
+TODO:
+
+* Create BaseEntity class
+* Create Sound Manager
+* Finish Physics
+* More
+
+*/
+
 AIEphysApp::AIEphysApp()
 {
 
