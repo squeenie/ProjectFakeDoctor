@@ -8,11 +8,17 @@
 #include <random>
 #include <time.h>
 #include "src\Animation.h"
+#include "src\TestEntity.h"
+#include "gl_core_4_4.h"
+#include <..\dependencies\glfw\include\GLFW\glfw3.h>
+#include <string.h>
+
 bool bForceApplied = false;
 bool bSpawned = false;
 
 Animation *ptrAnim;
 
+TestEntity *ptrEntity = nullptr;
 /*
 TODO:
 
@@ -41,8 +47,17 @@ bool AIEphysApp::startup()
 	m_Font = new aie::Font("./font/consolas.ttf", 16);
 	m_PhysScene = new PhysScene(-9.8, 1.0 / 60.0);
 
+	std::cout << "Creating Animation..." << std::endl;
 	ptrAnim = new Animation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f);
 	ptrAnim->SetLoop(true);
+	std::cout << "Done" << std::endl;
+
+	std::cout << "Spawning TestEntity..." << std::endl;
+	ptrEntity = new TestEntity();
+	ptrEntity->Init("./Images/Infantry/Stock_infantry.png", glm::vec2(50, 50), glm::vec2(0), 0.0f, 30, 30);
+	float speed = 50.0f;
+	ptrEntity->SetMaxSpeed(speed);
+	std::cout << "Done" << std::endl;
 
 	return true;
 }
@@ -56,42 +71,24 @@ void AIEphysApp::shutdown()
 
 void AIEphysApp::update(float deltaTime)
 {
-
-	// input example
 	aie::Input* input = aie::Input::getInstance();
+	m_MousePosition = glm::vec2(input->getMouseX(), getWindowHeight() - input->getMouseY());
 
-	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
-
+	
 	if (input->isKeyDown(aie::INPUT_KEY_SPACE))
 	{
-		if (!bSpawned)
-		{
-			bSpawned = true;
-			float massradius = 10;
-			float mass2 = 10;
-			PhysicsObject *testCircle = new CircleBody(glm::vec2(350, 300), glm::vec2(0), massradius, massradius, glm::vec4(1, 0, 0, 1));
-			PhysicsObject *testCircle2 = new CircleBody(glm::vec2(420, 300), glm::vec2(0), mass2, massradius, glm::vec4(1, 0, 0, 1));
-			m_PhysScene->AddActor(testCircle);
-			m_PhysScene->AddActor(testCircle2);
-
-			std::cout << "Created Circle" << std::endl;
-		}
-	}
-	if (input->isKeyDown(aie::INPUT_KEY_DELETE))
-	{
-		m_PhysScene->DeleteAllActors();
+		ptrEntity->SetWayPointTolerance(30.0f);
+		ptrEntity->SetCurrentWaypoint(m_MousePosition);
 	}
 	if (input->isKeyDown(aie::INPUT_KEY_ENTER))
 	{
-		if (!bForceApplied)
-		{
-			bForceApplied = true;
-			m_PhysScene->GetActors().at(0)->ApplyForce(glm::vec2(1.0, 0.0) * 30.0f);
-			//m_PhysScene->GetActors().at(0)->ApplyForceToActor(m_PhysScene->GetActors().at(1), m_PhysScene->GetActors().at(0)->GetMomentum());
-		}
+		float rot = ptrEntity->GetRotation() + (6 * deltaTime);
+		ptrEntity->SetRotation(rot);
 	}
+	
+	ptrEntity->Update(deltaTime);
 	ptrAnim->Play();
 	m_PhysScene->Update(deltaTime);
 	/*for (int i = 0; i < m_PhysScene->GetNumberOfActors(); ++i)
@@ -108,29 +105,28 @@ void AIEphysApp::draw()
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
-
-	for (int i = 0; i < m_PhysScene->GetNumberOfActors(); ++i)
-	{
-		m_PhysScene->GetActors().at(i)->Draw(m_2dRenderer);
-		//m_2dRenderer->drawLine(400, 300, m_PhysScene->GetActors().at(i)->GetPosition().x,
-		//						m_PhysScene->GetActors().at(i)->GetPosition().y);
-	}
-	//draw collision points
-	for (int i = 0; i < m_PhysScene->GetCollisionList().size(); ++i)
-	{
-		m_2dRenderer->drawBox(m_PhysScene->GetCollisionList().at(i).x, m_PhysScene->GetCollisionList().at(i).y, 1, 1, 0);
-		m_2dRenderer->drawLine(m_PhysScene->GetCollisionList().at(i).x, m_PhysScene->GetCollisionList().at(i).y, 500, 500);
-	}
-	
-	
 	// output some text
 	m_2dRenderer->drawText(m_Font, "Press ESC to quit", 0, 0);
 
+	if (ptrEntity->m_Velocity != glm::vec2(0) && glm::length(ptrEntity->m_Velocity) > 1.0)
+	{
+		std::string text;
+		text = "Rotation: ";
+		float angle = RadToDeg(VectorToAngle(ptrEntity->m_Velocity));
+		float newAngle = DegToRad(270.0f - angle);
+		ptrEntity->SetRotation(newAngle);
+		text += std::to_string(angle);
+		m_2dRenderer->drawText(m_Font, text.c_str(), 0, 600);
+	}
+	
+	
+	ptrEntity->Draw(m_2dRenderer);
+	if (ptrEntity->GetCurrectWaypoint() != glm::vec2(0))
+	{
+		m_2dRenderer->setRenderColour(1, 1, 1, 0.2f);
+		m_2dRenderer->drawCircle(ptrEntity->GetCurrectWaypoint().x, ptrEntity->GetCurrectWaypoint().y, ptrEntity->GetWayPointTolerance());
+	}
 
-	m_2dRenderer->setUVRect(ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).u, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).v, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).w, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).h);
-	/*m_2dRenderer->drawSprite(ptrAnim->GetTexturePtr(), 60, 30, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).w, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).h);*/
-	//m_2dRenderer->setUVRect(0, 0, 0.5, 0.5);
-	m_2dRenderer->drawSprite(ptrAnim->GetTexturePtr(), 200, 300, 128, 128);
 
 	// done drawing sprites
 	m_2dRenderer->end();
@@ -145,5 +141,20 @@ glm::vec2 AIEphysApp::GetRandomDirection()
 	tmp.x = glm::cos((float)(angle * 0.0174533));
 	tmp.y = glm::sin((float)(angle * 0.0174533));
 
-	return tmp;
+	return glm::normalize(tmp);
+}
+
+float AIEphysApp::VectorToAngle(glm::vec2 a_angle)
+{
+	return atan2(a_angle.x, a_angle.y);
+}
+
+float AIEphysApp::DegToRad(float a_degrees)
+{
+	return (a_degrees + 90.0f) * 0.0174533;
+}
+
+float AIEphysApp::RadToDeg(float a_radians)
+{
+	return (a_radians * 57.2958) + 90.0f;
 }

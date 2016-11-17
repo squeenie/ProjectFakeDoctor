@@ -99,6 +99,7 @@
     <ClCompile Include="src\PhsysicsObject.cpp" />
     <ClCompile Include="src\PhysScene.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
+    <ClCompile Include="src\TestEntity.cpp" />
     <ClCompile Include="src\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -109,10 +110,12 @@
     <ClInclude Include="src\Emitter.h" />
     <ClInclude Include="src\Force.h" />
     <ClInclude Include="src\Item.h" />
+    <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\PhysicsObject.h" />
     <ClInclude Include="src\PhysScene.h" />
     <ClInclude Include="src\RigidBody.h" />
-    <ClInclude Include="src\TestSoldier.h" />
+    <ClInclude Include="src\Squad.h" />
+    <ClInclude Include="src\TestEntity.h" />
     <ClInclude Include="src\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

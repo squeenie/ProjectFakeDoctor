@@ -40,3 +40,9 @@ void CTimer::Reset()
 	m_bActive = false;
 	m_bFinished = false;
 }
+
+void CTimer::Restart()
+{
+	m_bActive = true;
+	m_StartTime = clock();
+}

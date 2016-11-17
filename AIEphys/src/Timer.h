@@ -19,6 +19,7 @@ public:
 	void Start(double duration);
 	void Update();
 	void Reset();
+	void Restart();
 
 	bool m_bActive;
 	bool m_bFinished;
