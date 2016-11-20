@@ -112,14 +112,14 @@ void CSquad::ResolveSquadOnSquadCollisions(float &a_delta)
 	}
 }
 
-bool CSquad::AddMember(eEntityType a_type, glm::vec2 a_position)
+bool CSquad::CreateMember(eEntityType a_type, glm::vec2 a_position, unsigned int a_ID)
 {
 	if (m_Members.size() < m_uiMaximumMembers)
 	{
 		if (a_type == ENTITY_TEST_RIFLEMAN)
 		{
 			TestEntity* newEntity = new TestEntity();
-			newEntity->Init("./Images/Infantry/Stock_infantry.png", m_Position + a_position, glm::vec2(0), 0.0f, 30, 30, 1);//fix this ASAP
+			newEntity->Init("./Images/Infantry/Stock_infantry.png", m_Position + a_position, glm::vec2(0), 0.0f, 30, 30, a_ID);
 			float speed = 75.0f;
 			newEntity->SetMaxSpeed(speed);
 			m_Members.push_back(newEntity);

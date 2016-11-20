@@ -22,6 +22,12 @@
     <Filter Include="Header Files\Particle">
       <UniqueIdentifier>{59d373b3-fd70-4d80-b036-5561b7fbf820}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Weapon">
+      <UniqueIdentifier>{1b8ae8de-714d-41c2-b216-5e5347a35d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World">
+      <UniqueIdentifier>{71accd6e-69b7-4978-b432-35ecf76e841d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIEphysApp.cpp">
@@ -106,6 +112,15 @@
     </ClInclude>
     <ClInclude Include="src\EntityTypes.h">
       <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Projectile.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Weapon.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tile.h">
+      <Filter>Header Files\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

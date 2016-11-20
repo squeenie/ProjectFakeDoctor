@@ -27,6 +27,6 @@ protected:
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Font*			m_Font;
 	PhysScene*			m_PhysScene;
-
+	unsigned int		m_uiEntityCounter;
 
 };

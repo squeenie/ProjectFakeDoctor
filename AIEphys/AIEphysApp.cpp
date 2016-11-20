@@ -48,6 +48,7 @@ AIEphysApp::~AIEphysApp()
 bool AIEphysApp::startup()
 {
 	BombTimer.Start(1.0);
+	m_uiEntityCounter = 0;
 	srand(time(NULL));
 	m_2dRenderer = new aie::Renderer2D();
 
@@ -68,11 +69,11 @@ bool AIEphysApp::startup()
 
 	std::cout << "Creating Test Squad..." << std::endl;
 	testSquad = new CSquad(6, 1, glm::vec2(300, 200));
-	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
 	std::cout << "Done" << std::endl;
 	return true;
 }
