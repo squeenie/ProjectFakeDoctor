@@ -104,6 +104,16 @@ float CBaseEntity::GetWayPointTolerance()
 	return m_WayPointTolerance;
 }
 
+eEntityType CBaseEntity::GetEntityType()
+{
+	return m_EntityType;
+}
+
+unsigned int CBaseEntity::GetEntityID()
+{
+	return m_uiEntityID;
+}
+
 bool CBaseEntity::IsAlive()
 {
 	return m_bAlive;
@@ -116,6 +126,21 @@ bool CBaseEntity::ShouldUpdate()
 void CBaseEntity::SetCurrentSpeed(float a_speed)
 {
 	m_CurrentSpeed = a_speed;
+}
+
+float CBaseEntity::DegToRad(float a_degrees)
+{
+	return (a_degrees + 90.0f) * 0.0174533;
+}
+
+float CBaseEntity::RadToDeg(float a_rad)
+{
+	return (a_rad * 57.2958) + 90.0f;
+}
+
+float CBaseEntity::VectorToAngle(glm::vec2 &a_vec)
+{
+	return atan2(a_vec.x, a_vec.y);
 }
 
 void CBaseEntity::SetMaxSpeed(float &a_maxSpeed)

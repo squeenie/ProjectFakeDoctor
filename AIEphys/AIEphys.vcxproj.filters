@@ -57,6 +57,9 @@
     <ClCompile Include="src\TestEntity.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\Squad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIEphysApp.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="src\Particle.h">
       <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityTypes.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

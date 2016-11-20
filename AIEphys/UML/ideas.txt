@@ -1,0 +1,4 @@
+suppression:
+suppressed value equals suppression value minus cover value or something.
+Example:
+Troops in open get suppressed by a single mg crew, however same troops wont be fully suppressed in cover

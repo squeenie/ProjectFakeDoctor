@@ -12,13 +12,19 @@
 #include "gl_core_4_4.h"
 #include <..\dependencies\glfw\include\GLFW\glfw3.h>
 #include <string.h>
+#include "src\Timer.h"
+#include "src\Squad.h"
 
 bool bForceApplied = false;
 bool bSpawned = false;
+bool bDoExplosion = false;
 
 Animation *ptrAnim;
-
+CSquad *testSquad;
+glm::vec2 impact;
 TestEntity *ptrEntity = nullptr;
+CTimer BombTimer;
+
 /*
 TODO:
 
@@ -41,6 +47,7 @@ AIEphysApp::~AIEphysApp()
 
 bool AIEphysApp::startup()
 {
+	BombTimer.Start(1.0);
 	srand(time(NULL));
 	m_2dRenderer = new aie::Renderer2D();
 
@@ -49,16 +56,24 @@ bool AIEphysApp::startup()
 
 	std::cout << "Creating Animation..." << std::endl;
 	ptrAnim = new Animation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f);
-	ptrAnim->SetLoop(true);
+	ptrAnim->SetLoop(false);
 	std::cout << "Done" << std::endl;
 
 	std::cout << "Spawning TestEntity..." << std::endl;
 	ptrEntity = new TestEntity();
-	ptrEntity->Init("./Images/Infantry/Stock_infantry.png", glm::vec2(50, 50), glm::vec2(0), 0.0f, 30, 30);
-	float speed = 50.0f;
+	ptrEntity->Init("./Images/Infantry/Stock_infantry.png", glm::vec2(50, 50), glm::vec2(0), 0.0f, 60, 60, 1);
+	float speed = 75.0f;
 	ptrEntity->SetMaxSpeed(speed);
 	std::cout << "Done" << std::endl;
 
+	std::cout << "Creating Test Squad..." << std::endl;
+	testSquad = new CSquad(6, 1, glm::vec2(300, 200));
+	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	testSquad->AddMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	std::cout << "Done" << std::endl;
 	return true;
 }
 
@@ -71,6 +86,7 @@ void AIEphysApp::shutdown()
 
 void AIEphysApp::update(float deltaTime)
 {
+	BombTimer.Update();
 	aie::Input* input = aie::Input::getInstance();
 	m_MousePosition = glm::vec2(input->getMouseX(), getWindowHeight() - input->getMouseY());
 
@@ -79,18 +95,29 @@ void AIEphysApp::update(float deltaTime)
 	
 	if (input->isKeyDown(aie::INPUT_KEY_SPACE))
 	{
-		ptrEntity->SetWayPointTolerance(30.0f);
-		ptrEntity->SetCurrentWaypoint(m_MousePosition);
+		testSquad->SetSquadWayPointTolerance(100.0f);
+		testSquad->SetSquadWayPoint(m_MousePosition);
 	}
 	if (input->isKeyDown(aie::INPUT_KEY_ENTER))
 	{
-		float rot = ptrEntity->GetRotation() + (6 * deltaTime);
-		ptrEntity->SetRotation(rot);
+		if (BombTimer.m_bFinished)
+		{
+			BombTimer.Restart();
+			bDoExplosion = true;
+			impact = glm::vec2(getWindowWidth() * 0.5, getWindowHeight() * 0.5);
+			float dist = (float)((rand() % 400) * 0.5);
+			impact += GetRandomDirection() * dist;
+		}
+		else
+		{
+			bDoExplosion = false;
+		}
 	}
 	
 	ptrEntity->Update(deltaTime);
 	ptrAnim->Play();
 	m_PhysScene->Update(deltaTime);
+	testSquad->Update(deltaTime);
 	/*for (int i = 0; i < m_PhysScene->GetNumberOfActors(); ++i)
 	{
 		m_PhysScene->GetActors().at(i)->Update(deltaTime);
@@ -127,6 +154,13 @@ void AIEphysApp::draw()
 		m_2dRenderer->drawCircle(ptrEntity->GetCurrectWaypoint().x, ptrEntity->GetCurrectWaypoint().y, ptrEntity->GetWayPointTolerance());
 	}
 
+	if (bDoExplosion)
+	{
+		m_2dRenderer->setUVRect(ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).u, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).v, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).w, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).h);
+		m_2dRenderer->drawSprite(ptrAnim->GetTexturePtr(),impact.x, impact.y, 128, 128);
+	}
+
+	testSquad->Draw(m_2dRenderer);
 
 	// done drawing sprites
 	m_2dRenderer->end();

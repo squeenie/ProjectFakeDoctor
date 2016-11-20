@@ -17,7 +17,7 @@ public:
 	void		Move(float &a_delta) override;
 	void		Attack(float &a_delta) override;
 	void		Spawn(glm::vec2 &a_spawnPoint) override;
-	void		Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height) override;
+	void		Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height, unsigned int a_newID) override;
 	void		Seek(glm::vec2 &a_target, float &a_delta) override;
 	void		Flee(glm::vec2 &a_target, float &a_delta) override;
 	void		DrawHealth(aie::Renderer2D* a_renderer);

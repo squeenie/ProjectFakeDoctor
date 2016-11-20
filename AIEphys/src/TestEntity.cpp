@@ -4,14 +4,17 @@
 #include "Timer.h"
 #include "Animation.h"
 
+
 TestEntity::TestEntity()
 {
+	m_EntityType = ENTITY_TEST_RIFLEMAN;
 	m_Texture = nullptr;
 	m_CooldownTimer = new CTimer();
 	m_DieAnim = nullptr;
 	m_RunAnim = nullptr;
-	m_IdleAnim = new Animation("./Images/Infantry/Stock_Infantry.png", 1, 1, 1, 1);
-	m_WalkAnim = new Animation("./Images/Infantry/stock_inf_idle.png", 16, 4, 4, 16);
+	m_IdleAnim = new Animation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 8);
+	m_IdleAnim->SetLoop(true);
+	m_WalkAnim = new Animation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 16);
 	m_WalkAnim->SetLoop(true);
 	m_CurrentAnimation = m_IdleAnim;
 	m_State = STATE_IDLE;
@@ -43,10 +46,17 @@ void TestEntity::Update(float &a_delta)
 		m_CurrentAnimation->Play();
 	}
 	Move(a_delta);
+	if (m_Velocity != glm::vec2(0) && glm::length(m_Velocity) > 1.0)
+	{
+		float angle = RadToDeg(VectorToAngle(m_Velocity));
+		float newAngle = DegToRad(270.0f - angle);
+		SetRotation(newAngle);
+	}
 }
 
 void TestEntity::Draw(aie::Renderer2D* a_renderer/*, float &a_delta*/)
 {
+	a_renderer->setRenderColour(1, 1, 1, 1);
 	a_renderer->setUVRect(m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).u, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).v, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).w, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).h);
 	a_renderer->drawSprite(m_CurrentAnimation->GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);
 	/*
@@ -65,7 +75,12 @@ void TestEntity::Move(float &a_delta)
 	}
 	if (m_WayPoints.size() > 0)
 	{
-		
+		/*
+		TODO:
+		1. push new waypoints to back of vector
+		2. Follow waypoints in reverse order
+		3. Pop back when target is reached
+		*/
 		
 		//get direction and distance to waypoint
 		glm::vec2 newForce = glm::vec2(0);
@@ -85,12 +100,13 @@ void TestEntity::Move(float &a_delta)
 				m_CurrentSpeed = m_MaxSpeed;
 			}
 			Seek(m_WayPoints.at(0), a_delta);
+
 		}
 		else
 		{
 			m_State = STATE_IDLE;
 			glm::vec2 friction = (-glm::normalize(m_Velocity) *  m_MaxSpeed) * a_delta;
-			if (glm::length(friction) < (10.0 * a_delta))
+			if (glm::length(m_Velocity) < 1.0)
 			{
 				m_Velocity = glm::vec2(0);
 			}
@@ -118,7 +134,7 @@ void TestEntity::Spawn(glm::vec2 &a_spawnPoint)
 	m_Position = a_spawnPoint;
 }
 
-void TestEntity::Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height)
+void TestEntity::Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height, unsigned int a_newID)
 {
 	m_Position = a_position;
 	m_Velocity = a_velocity;
@@ -130,6 +146,7 @@ void TestEntity::Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2
 	m_MaxSpeed = 60.0f;
 	m_MaxHP = 60.0f;
 	m_CurrentHP = m_MaxHP;
+	m_uiEntityID = a_newID;
 }
 
 void TestEntity::Seek(glm::vec2 &a_target, float &a_delta)

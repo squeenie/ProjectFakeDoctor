@@ -3,6 +3,7 @@
 
 #include "glm\glm.hpp"
 #include <vector>
+#include "EntityTypes.h"
 
 class CItem;
 
@@ -14,6 +15,8 @@ enum eENTITY_STATE
 	STATE_RUN,
 	STATE_ATTACK
 };
+
+
 
 namespace aie
 {
@@ -32,7 +35,7 @@ public:
 	virtual void			Move(float &a_delta) = 0;
 	virtual void			Attack(float &a_delta) = 0;
 	virtual void			Spawn(glm::vec2 &a_spawnPoint) = 0;
-	virtual void			Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height) = 0;
+	virtual void			Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height, unsigned int a_newID) = 0;
 	virtual void			Seek(glm::vec2 &a_target, float &a_delta) = 0;
 	virtual void			Flee(glm::vec2 &a_target, float &a_delta) = 0;
 	virtual void			DrawHealth(aie::Renderer2D* a_renderer) = 0;
@@ -48,6 +51,8 @@ public:
 	glm::vec2				GetCurrectWaypoint();
 	float					GetCurrentSpeed();
 	float					GetWayPointTolerance();
+	eEntityType				GetEntityType();
+	unsigned int			GetEntityID();
 	bool					IsAlive();
 	bool					ShouldUpdate();
 
@@ -59,6 +64,10 @@ public:
 	void					SetHeight(float a_height);
 	void					SetWayPointTolerance(float a_tolerance);
 	void					SetCurrentSpeed(float a_speed);
+
+	float					DegToRad(float a_degrees);
+	float					RadToDeg(float a_rad);
+	float					VectorToAngle(glm::vec2 &a_vec);
 
 	void					AddForce(glm::vec2 &a_force);
 	void					AddWayPoint(glm::vec2 a_waypoint);
@@ -83,7 +92,9 @@ protected:
 	aie::Texture*			m_Texture;
 	std::vector<CItem*>		m_Inventory;
 	std::vector<glm::vec2>	m_WayPoints;
+	eEntityType				m_EntityType;
 	eENTITY_STATE			m_State;
+	unsigned int			m_uiEntityID;
 };
 
 
