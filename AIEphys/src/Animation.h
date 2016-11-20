@@ -1,6 +1,7 @@
 #ifndef _ANIMATION_H_
 #define _ANIMATION_H_
 
+#include "glm\glm.hpp"
 #include <string>
 #include <vector>
 
@@ -9,6 +10,7 @@ class CTimer;
 namespace aie
 {
 	class Texture;
+	class Renderer2D;
 }
 
 struct AnimFrame
@@ -16,11 +18,11 @@ struct AnimFrame
 	float u, v, w, h;
 };
 
-class Animation
+class CAnimation
 {
 public:
-	Animation(const char *a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate);
-	~Animation();
+	CAnimation(const char *a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate, float a_width, float a_height);
+	~CAnimation();
 
 	void					SetNumberOfFrames(unsigned int a_frameCount);
 	unsigned int			GetNumberOfFrames();
@@ -35,6 +37,11 @@ public:
 	void					Play();
 	bool					IsLooping();
 	void					SetLoop(bool a_loop);
+	void					Draw(aie::Renderer2D* a_renderer);
+	glm::vec2				m_Position;
+	float					m_Rotation;
+	float					m_Width;
+	float					m_Height;
 private:
 	bool					m_bPlaying;
 	bool					m_bLoop;

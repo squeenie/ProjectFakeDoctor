@@ -3,21 +3,22 @@
 #include "Texture.h"
 #include "Timer.h"
 #include "Animation.h"
-
+#include "TestRifle.h"
 
 TestEntity::TestEntity()
 {
 	m_EntityType = ENTITY_TEST_RIFLEMAN;
-	m_Texture = nullptr;
+	m_Texture = new aie::Texture("./Images/stock_infantry.png");
 	m_CooldownTimer = new CTimer();
 	m_DieAnim = nullptr;
 	m_RunAnim = nullptr;
-	m_IdleAnim = new Animation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 8);
-	m_IdleAnim->SetLoop(true);
-	m_WalkAnim = new Animation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 16);
-	m_WalkAnim->SetLoop(true);
-	m_CurrentAnimation = m_IdleAnim;
-	m_State = STATE_IDLE;
+	m_IdleAnim = nullptr;
+	m_WalkAnim = nullptr;
+	m_CurrentAnimation = nullptr;
+	m_State = STATE_UNINITIALIZED;
+	m_PreviousState = STATE_UNINITIALIZED;
+	m_MainWeapon = new CTestRifle();
+	m_MainWeapon->SetParent(this);
 }
 
 TestEntity::~TestEntity()
@@ -52,17 +53,27 @@ void TestEntity::Update(float &a_delta)
 		float newAngle = DegToRad(270.0f - angle);
 		SetRotation(newAngle);
 	}
+	m_PreviousState = m_State;
 }
 
 void TestEntity::Draw(aie::Renderer2D* a_renderer/*, float &a_delta*/)
 {
-	a_renderer->setRenderColour(1, 1, 1, 1);
+	/*a_renderer->setRenderColour(1, 1, 1, 1);
 	a_renderer->setUVRect(m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).u, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).v, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).w, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).h);
-	a_renderer->drawSprite(m_CurrentAnimation->GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);
-	/*
-	m_2dRenderer->setUVRect(ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).u, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).v, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).w, ptrAnim->GetFrameList().at(ptrAnim->GetCurrentFrame()).h);
-	m_2dRenderer->drawSprite(ptrAnim->GetTexturePtr(), 200, 300, 128, 128);
-	*/
+	a_renderer->drawSprite(m_CurrentAnimation->GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);*/
+	m_CurrentAnimation->m_Position = m_Position;
+	m_CurrentAnimation->m_Rotation = m_Rotation;
+	m_CurrentAnimation->Draw(a_renderer);
+	if (m_State == STATE_AIM)
+	{
+		//draw aim progress bar or something
+	}
+	if (m_State == STATE_ATTACK)
+	{
+
+	}
+	//m_CurrentAnimation->Draw(a_renderer);
+
 	DrawHealth(a_renderer);
 }
 
@@ -142,11 +153,23 @@ void TestEntity::Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2
 	m_Width = a_width;
 	m_Height = a_height;
 	m_Texture = new aie::Texture(a_texturePath);
+
+	m_IdleAnim = new CAnimation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 8, m_Width, m_Height);
+	m_IdleAnim->SetLoop(true);
+	m_WalkAnim = new CAnimation("./Images/Infantry/stock_inf_idle.png", 31, 31, 1, 16, m_Width, m_Height);
+	m_WalkAnim->SetLoop(true);
+	m_CurrentAnimation = m_IdleAnim;
+
+	m_State = STATE_IDLE;
+	m_PreviousState = STATE_IDLE;
+
 	m_CurrentSpeed = 0.0f;
 	m_MaxSpeed = 60.0f;
 	m_MaxHP = 60.0f;
 	m_CurrentHP = m_MaxHP;
 	m_uiEntityID = a_newID;
+	m_bAlive = true;
+	m_bUpdate = true;
 }
 
 void TestEntity::Seek(glm::vec2 &a_target, float &a_delta)
@@ -160,7 +183,6 @@ void TestEntity::Flee(glm::vec2 &a_target, float &a_delta)
 	glm::vec2 dir = glm::normalize(m_Position - a_target);
 	AddForce(dir * (m_CurrentSpeed * a_delta));
 }
-
 
 void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
 {
@@ -185,4 +207,9 @@ void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
 		a_renderer->setRenderColour(1, 1, 1);
 	}
 	a_renderer->drawLine(p.x, p.y, p.x + (m_Width * percentage), p.y, 2.0);
+}
+
+void TestEntity::DrawMuzzle(aie::Renderer2D* a_renderer)
+{
+
 }

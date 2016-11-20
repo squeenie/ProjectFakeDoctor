@@ -19,7 +19,7 @@ bool bForceApplied = false;
 bool bSpawned = false;
 bool bDoExplosion = false;
 
-Animation *ptrAnim;
+CAnimation *ptrAnim;
 CSquad *testSquad;
 glm::vec2 impact;
 TestEntity *ptrEntity = nullptr;
@@ -56,24 +56,31 @@ bool AIEphysApp::startup()
 	m_PhysScene = new PhysScene(-9.8, 1.0 / 60.0);
 
 	std::cout << "Creating Animation..." << std::endl;
-	ptrAnim = new Animation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f);
+	ptrAnim = new CAnimation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f, 128, 128);
 	ptrAnim->SetLoop(false);
 	std::cout << "Done" << std::endl;
 
 	std::cout << "Spawning TestEntity..." << std::endl;
+	m_uiEntityCounter++;
 	ptrEntity = new TestEntity();
-	ptrEntity->Init("./Images/Infantry/Stock_infantry.png", glm::vec2(50, 50), glm::vec2(0), 0.0f, 60, 60, 1);
+	ptrEntity->Init("./Images/Infantry/Stock_infantry.png", glm::vec2(50, 50), glm::vec2(0), 0.0f, 60, 60, m_uiEntityCounter);
 	float speed = 75.0f;
 	ptrEntity->SetMaxSpeed(speed);
 	std::cout << "Done" << std::endl;
 
 	std::cout << "Creating Test Squad..." << std::endl;
 	testSquad = new CSquad(6, 1, glm::vec2(300, 200));
-	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
-	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f);
+	m_uiEntityCounter++;
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f, m_uiEntityCounter);
+	m_uiEntityCounter++;
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f, m_uiEntityCounter);
+	m_uiEntityCounter++;
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f, m_uiEntityCounter);
+	m_uiEntityCounter++;
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f, m_uiEntityCounter);
+	m_uiEntityCounter++;
+	testSquad->CreateMember(ENTITY_TEST_RIFLEMAN, GetRandomDirection() * 50.0f, m_uiEntityCounter);
+
 	std::cout << "Done" << std::endl;
 	return true;
 }

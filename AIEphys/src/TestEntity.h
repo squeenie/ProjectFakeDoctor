@@ -4,7 +4,7 @@
 #include "BaseEntity.h"
 
 class CTimer;
-class Animation;
+class CAnimation;
 class Weapon;
 class TestEntity : public CBaseEntity
 {
@@ -21,14 +21,15 @@ public:
 	void		Seek(glm::vec2 &a_target, float &a_delta) override;
 	void		Flee(glm::vec2 &a_target, float &a_delta) override;
 	void		DrawHealth(aie::Renderer2D* a_renderer);
+	void		DrawMuzzle(aie::Renderer2D* a_renderer);
 
 private:
 	CTimer*		m_CooldownTimer;
-	Animation*	m_CurrentAnimation;
-	Animation*	m_RunAnim;
-	Animation*	m_DieAnim;
-	Animation*	m_IdleAnim;
-	Animation*	m_WalkAnim;
+	CAnimation*	m_CurrentAnimation;
+	CAnimation*	m_RunAnim;
+	CAnimation*	m_DieAnim;
+	CAnimation*	m_IdleAnim;
+	CAnimation*	m_WalkAnim;
 	//Weapon*		m_PrimaryWeapon;
 	//Weapon*		m_SecondaryWeapon;
 };

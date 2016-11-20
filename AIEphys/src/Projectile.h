@@ -21,6 +21,7 @@ public:
 	eProjectileType GetProjectileType();
 	const char*		GetName();
 	glm::vec2 m_Position;
+	glm::vec2 m_StartPosition;
 	glm::vec2 m_Velocity;
 protected:
 	const char* m_Name;

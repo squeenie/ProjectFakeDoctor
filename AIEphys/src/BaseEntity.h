@@ -6,14 +6,17 @@
 #include "EntityTypes.h"
 
 class CItem;
+class CWeapon;
 
 enum eENTITY_STATE
 {
+	STATE_UNINITIALIZED,
 	STATE_IDLE,
 	STATE_WALK,
 	STATE_DEAD,
 	STATE_RUN,
-	STATE_ATTACK
+	STATE_ATTACK,
+	STATE_AIM
 };
 
 
@@ -47,7 +50,13 @@ public:
 	float					GetRotation();
 	float					GetWidth();
 	float					GetHeight();
+	float					GetAccuracy();
+	float					GetSuppressionLevel();
+	float					GetExhaustionLevel();
 	aie::Texture*			GetTexturePtr();
+	CWeapon*				GetMainWeapon();
+	std::vector<CWeapon*>	GetAllWeapons();
+	std::vector<CWeapon*>	GetAuxillaryWeapons();
 	glm::vec2				GetCurrectWaypoint();
 	float					GetCurrentSpeed();
 	float					GetWayPointTolerance();
@@ -64,6 +73,9 @@ public:
 	void					SetHeight(float a_height);
 	void					SetWayPointTolerance(float a_tolerance);
 	void					SetCurrentSpeed(float a_speed);
+	void					SetMainWeapon(CWeapon* a_weapon);
+	void					SetAuxiliaryWeaponList(std::vector<CWeapon*> a_weaponList);
+
 
 	float					DegToRad(float a_degrees);
 	float					RadToDeg(float a_rad);
@@ -72,7 +84,10 @@ public:
 	void					AddForce(glm::vec2 &a_force);
 	void					AddWayPoint(glm::vec2 a_waypoint);
 	void					SetCurrentWaypoint(glm::vec2 a_waypoint);
-
+	void					AddAuxiliaryWeapon(CWeapon* a_weapon);
+	void					RemoveAuxiliaryWeapon(int a_index);
+	void					RemoveAuxiliaryWeapon(CWeapon* a_weapon);
+	void					GenerateRandomStats();
 
 	glm::vec2				m_Position;
 	glm::vec2				m_Velocity;
@@ -87,6 +102,10 @@ protected:
 	float					m_Width;
 	float					m_Height;
 	float					m_WayPointTolerance;
+	float					m_Accuracy;
+	float					m_SuppressionLevel;
+	float					m_ExhaustionLevel;
+	float					m_MoraleLevel;
 	bool					m_bUpdate;
 	bool					m_bAlive;
 	aie::Texture*			m_Texture;
@@ -94,7 +113,10 @@ protected:
 	std::vector<glm::vec2>	m_WayPoints;
 	eEntityType				m_EntityType;
 	eENTITY_STATE			m_State;
+	eENTITY_STATE			m_PreviousState;
 	unsigned int			m_uiEntityID;
+	CWeapon*				m_MainWeapon;
+	std::vector<CWeapon*>	m_AuxiliaryWeapons;
 };
 
 

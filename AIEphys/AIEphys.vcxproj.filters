@@ -28,6 +28,9 @@
     <Filter Include="Header Files\World">
       <UniqueIdentifier>{71accd6e-69b7-4978-b432-35ecf76e841d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Weapon">
+      <UniqueIdentifier>{fb1b1d58-2dcf-45a5-9973-def6fa0c3d1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIEphysApp.cpp">
@@ -65,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="src\Squad.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Weapon.cpp">
+      <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestRifle.cpp">
+      <Filter>Source Files\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="src\Tile.h">
       <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestRifle.h">
+      <Filter>Header Files\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

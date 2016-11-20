@@ -1,8 +1,9 @@
 #include "Animation.h"
 #include "texture.h"
 #include "Timer.h"
+#include "Renderer2D.h"
 
-Animation::Animation(const char * a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate)
+CAnimation::CAnimation(const char * a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate, float a_width, float a_height)
 {
 	m_Texture = new aie::Texture(a_texture);
 	m_TotalFrames = a_numFrames;
@@ -13,6 +14,8 @@ Animation::Animation(const char * a_texture, unsigned int a_numFrames, unsigned 
 	m_NumFramesAcross = a_numFramesAcross;
 	m_NumFramesDown = a_numFramesDown;
 	m_Timer = new CTimer();
+	m_Width = a_width;
+	m_Height = a_height;
 	for (int y = 0; y < m_NumFramesDown; ++y)
 	{
 		unsigned int count = 0;
@@ -39,65 +42,65 @@ Animation::Animation(const char * a_texture, unsigned int a_numFrames, unsigned 
 	}
 }
 
-Animation::~Animation()
+CAnimation::~CAnimation()
 {
 	delete m_Timer;
 	delete m_Texture;
 }
 
-void Animation::SetNumberOfFrames(unsigned int a_frameCount)
+void CAnimation::SetNumberOfFrames(unsigned int a_frameCount)
 {
 	//m_TotalFrames = a_frameCount;
 	return;
 }
 
-unsigned int Animation::GetNumberOfFrames()
+unsigned int CAnimation::GetNumberOfFrames()
 {
 	return m_TotalFrames;
 }
 
-void Animation::SetTexture(const char *a_texture)
+void CAnimation::SetTexture(const char *a_texture)
 {
 	std::cout << "[!] Warning! SetTexture is not advised. Be careful to maintain correct dimensions, frame count, etc" << std::endl;
 	//TODO
 }
 
-const char* Animation::GetTextureFileName()
+const char* CAnimation::GetTextureFileName()
 {
 	return m_Texture->getFilename().c_str();
 }
 
-unsigned int Animation::GetCurrentFrame()
+unsigned int CAnimation::GetCurrentFrame()
 {
 	return m_CurrentFrame;
 }
 
-aie::Texture* Animation::GetTexturePtr()
+aie::Texture* CAnimation::GetTexturePtr()
 {
 	return m_Texture;
 }
 
-std::vector<AnimFrame> Animation::GetFrameList()
+std::vector<AnimFrame> CAnimation::GetFrameList()
 {
 	return m_FrameList;
 }
 
-void Animation::AddFrame(AnimFrame a_newFrame)
+void CAnimation::AddFrame(AnimFrame a_newFrame)
 {
 	m_FrameList.push_back(a_newFrame);
 }
 
-void Animation::SetFrameRate(float &a_fps)
+void CAnimation::SetFrameRate(float &a_fps)
 {
 	m_FrameRate = a_fps;
 }
 
-float Animation::GetFrameRate()
+float CAnimation::GetFrameRate()
 {
 	return m_FrameRate;
 }
 
-void Animation::Play()
+void CAnimation::Play()
 {
 	if (!m_bPlaying)
 	{
@@ -129,12 +132,19 @@ void Animation::Play()
 	
 }
 
-bool Animation::IsLooping()
+bool CAnimation::IsLooping()
 {
 	return m_bLoop;
 }
 
-void Animation::SetLoop(bool a_loop)
+void CAnimation::SetLoop(bool a_loop)
 {
 	m_bLoop = a_loop;
+}
+
+void CAnimation::Draw(aie::Renderer2D* a_renderer)
+{
+	a_renderer->setRenderColour(1, 1, 1, 1);
+	a_renderer->setUVRect(GetFrameList().at(GetCurrentFrame()).u, GetFrameList().at(GetCurrentFrame()).v, GetFrameList().at(GetCurrentFrame()).w, GetFrameList().at(GetCurrentFrame()).h);
+	a_renderer->drawSprite(GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);
 }

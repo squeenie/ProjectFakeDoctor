@@ -101,7 +101,9 @@
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Squad.cpp" />
     <ClCompile Include="src\TestEntity.cpp" />
+    <ClCompile Include="src\TestRifle.cpp" />
     <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIEphysApp.h" />
@@ -119,6 +121,7 @@
     <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\Squad.h" />
     <ClInclude Include="src\TestEntity.h" />
+    <ClInclude Include="src\TestRifle.h" />
     <ClInclude Include="src\Tile.h" />
     <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Weapon.h" />
