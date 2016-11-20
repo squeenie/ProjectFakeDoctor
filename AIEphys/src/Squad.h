@@ -30,6 +30,7 @@ public:
 	void						SetSquadWayPoint(glm::vec2 a_waypoint);
 	void						SetSquadWayPointTolerance(float a_tol);
 	void						ResolveSquadOnSquadCollisions(float &a_delta);
+	void						SetSquadTarget(CBaseEntity* a_target);
 
 	bool						CreateMember(eEntityType a_type, glm::vec2 a_position, unsigned int a_ID);
 	

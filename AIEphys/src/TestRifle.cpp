@@ -1,6 +1,7 @@
 #include "TestRifle.h"
 #include "Timer.h"
 #include "Animation.h"
+#include "Audio.h"
 
 
 CTestRifle::CTestRifle()
@@ -15,7 +16,10 @@ CTestRifle::CTestRifle()
 	m_Name = new char[strlen("Wep_Test_rifle")];
 	strcpy(m_Name, "Wep_Test_rifle");
 	
+	m_SoundFire = new aie::Audio("./audio/guns/TestRifle_fire.wav");
+
 	m_CoolDownTimer = new CTimer();
+	m_CoolDownTimer->m_bFinished = true;
 	
 }
 CTestRifle::CTestRifle(const char* a_name)
@@ -47,6 +51,20 @@ void CTestRifle::Fire(CBaseEntity* a_target)
 	//Start case ejection
 	//Update ammo count
 	//Play sound
+
+	if (ReadyToFire())
+	{
+		m_CoolDownTimer->Start(3.0);
+		m_AnimMuzzle->SetLoop(true);
+		m_AnimMuzzle->Play();
+		m_SoundFire->play();
+	}
+	else
+	{
+		m_AnimMuzzle->Play();
+	}
+	
+	
 }
 
 void CTestRifle::OnReload()

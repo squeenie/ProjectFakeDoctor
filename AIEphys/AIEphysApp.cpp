@@ -23,6 +23,7 @@ CAnimation *ptrAnim;
 CSquad *testSquad;
 glm::vec2 impact;
 TestEntity *ptrEntity = nullptr;
+
 CTimer BombTimer;
 
 /*
@@ -103,8 +104,9 @@ void AIEphysApp::update(float deltaTime)
 	
 	if (input->isKeyDown(aie::INPUT_KEY_SPACE))
 	{
-		testSquad->SetSquadWayPointTolerance(100.0f);
-		testSquad->SetSquadWayPoint(m_MousePosition);
+		//testSquad->SetSquadWayPointTolerance(100.0f);
+		//testSquad->SetSquadWayPoint(m_MousePosition);
+		testSquad->SetSquadTarget(ptrEntity);
 	}
 	if (input->isKeyDown(aie::INPUT_KEY_ENTER))
 	{

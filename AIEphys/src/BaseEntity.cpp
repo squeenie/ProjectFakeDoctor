@@ -1,5 +1,6 @@
 #include "BaseEntity.h"
 #include <iostream>
+#include "Timer.h"
 
 CBaseEntity::CBaseEntity()
 {
@@ -23,6 +24,8 @@ CBaseEntity::CBaseEntity()
 	m_Height = 0;
 	m_Position = glm::vec2(0);
 	m_Accuracy = 0;
+	m_AimTimer = nullptr;
+	m_ReloadTimer = nullptr;
 }
 
 CBaseEntity::~CBaseEntity()
@@ -227,6 +230,18 @@ void CBaseEntity::SetAuxiliaryWeaponList(std::vector<CWeapon*> a_weaponList)
 	}
 	m_AuxiliaryWeapons.clear();
 	m_AuxiliaryWeapons = a_weaponList;
+}
+
+void CBaseEntity::SetCurentTarget(CBaseEntity* a_target)
+{
+	if (m_Targets.size() > 0)
+	{
+		m_Targets.at(0) = a_target;
+	}
+	else
+	{
+		m_Targets.push_back(a_target);
+	}
 }
 
 float CBaseEntity::DegToRad(float a_degrees)

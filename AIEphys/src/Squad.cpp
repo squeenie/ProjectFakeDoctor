@@ -112,6 +112,14 @@ void CSquad::ResolveSquadOnSquadCollisions(float &a_delta)
 	}
 }
 
+void CSquad::SetSquadTarget(CBaseEntity* a_target)
+{
+	for (int i = 0; i < m_Members.size(); ++i)
+	{
+		m_Members.at(i)->SetCurentTarget(a_target);
+	}
+}
+
 bool CSquad::CreateMember(eEntityType a_type, glm::vec2 a_position, unsigned int a_ID)
 {
 	if (m_Members.size() < m_uiMaximumMembers)

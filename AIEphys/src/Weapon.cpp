@@ -94,6 +94,11 @@ float CWeapon::GetCondition()
 	return m_Condition;
 }
 
+CAnimation* CWeapon::GetMuzzleAnimation()
+{
+	return m_AnimMuzzle;
+}
+
 bool CWeapon::ReadyToFire()
 {
 	if (m_CoolDownTimer != nullptr)

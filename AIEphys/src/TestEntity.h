@@ -20,6 +20,8 @@ public:
 	void		Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2 a_velocity, float a_rotation, float a_width, float a_height, unsigned int a_newID) override;
 	void		Seek(glm::vec2 &a_target, float &a_delta) override;
 	void		Flee(glm::vec2 &a_target, float &a_delta) override;
+	void		Reload(float &a_delta) override;
+
 	void		DrawHealth(aie::Renderer2D* a_renderer);
 	void		DrawMuzzle(aie::Renderer2D* a_renderer);
 

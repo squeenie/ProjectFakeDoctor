@@ -9,6 +9,7 @@ class CAnimation;
 namespace aie
 {
 	class Texture;
+	class Audio;
 }
 
 class CWeapon
@@ -32,6 +33,7 @@ public:
 	CBaseEntity*	GetParent();
 	unsigned int	GetCurrentAmmoCount();
 	float			GetCondition();
+	CAnimation*		GetMuzzleAnimation();
 
 	bool			ReadyToFire();
 protected:
@@ -48,6 +50,8 @@ protected:
 	CAnimation*		m_AnimMuzzle;
 	CTimer*			m_CoolDownTimer;
 	CBaseEntity*	m_Parent;
+	aie::Audio*		m_SoundFire;
+	aie::Audio*		m_SoundReload;
 };
 
 

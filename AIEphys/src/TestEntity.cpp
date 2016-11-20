@@ -19,6 +19,7 @@ TestEntity::TestEntity()
 	m_PreviousState = STATE_UNINITIALIZED;
 	m_MainWeapon = new CTestRifle();
 	m_MainWeapon->SetParent(this);
+	
 }
 
 TestEntity::~TestEntity()
@@ -34,15 +35,28 @@ void TestEntity::Update(float &a_delta)
 		m_CurrentHP = 0;
 	}
 
-	if (m_bAlive)
+	if (m_bAlive) //TODO: Create proper logic (sense, think, act) not state machine
 	{
+		if (m_Targets.size() > 0)
+		{
+			m_State = STATE_ATTACK;
+		}
 		if (m_State == STATE_IDLE)
 		{
 			m_CurrentAnimation = m_IdleAnim;
+			
 		}
 		else if (m_State == STATE_WALK)
 		{
 			m_CurrentAnimation = m_WalkAnim;
+		}
+
+		if (m_State == STATE_ATTACK)
+		{
+			if (m_Targets.at(0)->IsAlive())
+			{
+				Attack(a_delta);
+			}
 		}
 		m_CurrentAnimation->Play();
 	}
@@ -58,9 +72,7 @@ void TestEntity::Update(float &a_delta)
 
 void TestEntity::Draw(aie::Renderer2D* a_renderer/*, float &a_delta*/)
 {
-	/*a_renderer->setRenderColour(1, 1, 1, 1);
-	a_renderer->setUVRect(m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).u, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).v, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).w, m_CurrentAnimation->GetFrameList().at(m_CurrentAnimation->GetCurrentFrame()).h);
-	a_renderer->drawSprite(m_CurrentAnimation->GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);*/
+	
 	m_CurrentAnimation->m_Position = m_Position;
 	m_CurrentAnimation->m_Rotation = m_Rotation;
 	m_CurrentAnimation->Draw(a_renderer);
@@ -70,9 +82,8 @@ void TestEntity::Draw(aie::Renderer2D* a_renderer/*, float &a_delta*/)
 	}
 	if (m_State == STATE_ATTACK)
 	{
-
+		DrawMuzzle(a_renderer);
 	}
-	//m_CurrentAnimation->Draw(a_renderer);
 
 	DrawHealth(a_renderer);
 }
@@ -137,7 +148,7 @@ void TestEntity::Move(float &a_delta)
 
 void TestEntity::Attack(float &a_delta)
 {
-
+	m_MainWeapon->Fire(m_Targets.at(0));
 }
 
 void TestEntity::Spawn(glm::vec2 &a_spawnPoint)
@@ -170,6 +181,10 @@ void TestEntity::Init(const char* a_texturePath, glm::vec2 a_position, glm::vec2
 	m_uiEntityID = a_newID;
 	m_bAlive = true;
 	m_bUpdate = true;
+
+	float condition = 1.0;
+	m_MainWeapon->SetCondition(condition);
+	m_MainWeapon->SetFlashSize(48, 48);
 }
 
 void TestEntity::Seek(glm::vec2 &a_target, float &a_delta)
@@ -182,6 +197,12 @@ void TestEntity::Flee(glm::vec2 &a_target, float &a_delta)
 {
 	glm::vec2 dir = glm::normalize(m_Position - a_target);
 	AddForce(dir * (m_CurrentSpeed * a_delta));
+}
+
+void TestEntity::Reload(float &a_delta)
+{
+	m_State = STATE_RELOAD;
+	m_ReloadTimer->Start(m_SecondsToReload);
 }
 
 void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
@@ -211,5 +232,6 @@ void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
 
 void TestEntity::DrawMuzzle(aie::Renderer2D* a_renderer)
 {
-
+	m_MainWeapon->GetMuzzleAnimation()->m_Position = m_Position + glm::vec2(0, 16);
+	m_MainWeapon->GetMuzzleAnimation()->Draw(a_renderer);
 }
