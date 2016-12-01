@@ -1,8 +1,10 @@
 #include "AIEphysApp.h"
 
+AIEphysApp *app;
+
 int main() {
 	
-	AIEphysApp *app = new AIEphysApp();
+	app = new AIEphysApp();
 	app->run("AIE", 1280, 720, false);
 	delete app;
 

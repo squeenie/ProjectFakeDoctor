@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Weapon">
       <UniqueIdentifier>{fb1b1d58-2dcf-45a5-9973-def6fa0c3d1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{75553085-6c9c-4127-950e-e09a78a1dc90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{82c7b719-157b-4329-9cb7-3763056d5959}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIEphysApp.cpp">
@@ -74,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="src\TestRifle.cpp">
       <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureManager.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="src\TestRifle.h">
       <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="TestProjectile.h">
+      <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureManager.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

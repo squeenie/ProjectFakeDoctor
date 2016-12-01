@@ -232,6 +232,16 @@ void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
 
 void TestEntity::DrawMuzzle(aie::Renderer2D* a_renderer)
 {
-	m_MainWeapon->GetMuzzleAnimation()->m_Position = m_Position + glm::vec2(0, 16);
+	if (m_MainWeapon->GetMuzzleAnimation()->IsFinished())
+	{
+		return;
+	}
+	glm::vec2 dir = glm::normalize(m_Targets.at(0)->m_Position - m_Position);
+	m_MainWeapon->GetMuzzleAnimation()->m_Position = m_Position + (dir * 30.0f);
+
+	float angle = RadToDeg(VectorToAngle(dir));
+	angle = DegToRad(90.0f - angle);
+
+	m_MainWeapon->GetMuzzleAnimation()->m_Rotation = angle;
 	m_MainWeapon->GetMuzzleAnimation()->Draw(a_renderer);
 }

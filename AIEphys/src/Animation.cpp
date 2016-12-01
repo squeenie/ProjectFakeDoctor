@@ -6,6 +6,7 @@
 CAnimation::CAnimation(const char * a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate, float a_width, float a_height)
 {
 	m_Texture = new aie::Texture(a_texture);
+	m_Position = glm::vec2(0);
 	m_TotalFrames = a_numFrames;
 	m_FrameRate = a_frameRate;
 	m_CurrentFrame = 0;
@@ -16,6 +17,7 @@ CAnimation::CAnimation(const char * a_texture, unsigned int a_numFrames, unsigne
 	m_Timer = new CTimer();
 	m_Width = a_width;
 	m_Height = a_height;
+	m_bFinished = true;
 	for (int y = 0; y < m_NumFramesDown; ++y)
 	{
 		unsigned int count = 0;
@@ -106,6 +108,7 @@ void CAnimation::Play()
 	{
 		m_Timer->Start(1.0 / m_FrameRate);
 		m_bPlaying = true;
+		m_bFinished = false;
 	}
 	else
 	{
@@ -119,12 +122,15 @@ void CAnimation::Play()
 			{
 				if (m_bLoop)
 				{
+					m_bFinished = false;
 					m_CurrentFrame = 0;
 				}
 				else
 				{
-					m_CurrentFrame = m_TotalFrames - 1;
+					/*m_CurrentFrame = m_TotalFrames - 1;
 					m_bPlaying = false;
+					m_bFinished = true;*/
+					Stop();
 				}
 			}
 		}
@@ -132,9 +138,23 @@ void CAnimation::Play()
 	
 }
 
+void CAnimation::Stop()
+{
+	m_CurrentFrame = 0;
+	m_bPlaying = false;
+	m_bLoop = false;
+	m_bFinished = true;
+	m_Timer->Reset();
+}
+
 bool CAnimation::IsLooping()
 {
 	return m_bLoop;
+}
+
+bool CAnimation::IsFinished()
+{
+	return m_bFinished;
 }
 
 void CAnimation::SetLoop(bool a_loop)
@@ -144,7 +164,10 @@ void CAnimation::SetLoop(bool a_loop)
 
 void CAnimation::Draw(aie::Renderer2D* a_renderer)
 {
-	a_renderer->setRenderColour(1, 1, 1, 1);
-	a_renderer->setUVRect(GetFrameList().at(GetCurrentFrame()).u, GetFrameList().at(GetCurrentFrame()).v, GetFrameList().at(GetCurrentFrame()).w, GetFrameList().at(GetCurrentFrame()).h);
-	a_renderer->drawSprite(GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);
+	if (!m_bFinished)
+	{
+		a_renderer->setRenderColour(1, 1, 1, 1);
+		a_renderer->setUVRect(GetFrameList().at(GetCurrentFrame()).u, GetFrameList().at(GetCurrentFrame()).v, GetFrameList().at(GetCurrentFrame()).w, GetFrameList().at(GetCurrentFrame()).h);
+		a_renderer->drawSprite(GetTexturePtr(), m_Position.x, m_Position.y, m_Width, m_Height, m_Rotation);
+	}
 }

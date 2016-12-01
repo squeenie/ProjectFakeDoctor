@@ -55,13 +55,22 @@ void CTestRifle::Fire(CBaseEntity* a_target)
 	if (ReadyToFire())
 	{
 		m_CoolDownTimer->Start(3.0);
-		m_AnimMuzzle->SetLoop(true);
+		m_AnimMuzzle->SetLoop(false);
 		m_AnimMuzzle->Play();
 		m_SoundFire->play();
 	}
 	else
 	{
-		m_AnimMuzzle->Play();
+		if (!m_AnimMuzzle->IsFinished())
+		{
+			m_AnimMuzzle->Play();
+		}
+		else
+		{
+			m_AnimMuzzle->Stop();
+			//stop
+		}
+		//if(m_AnimMuzzle->)
 	}
 	
 	
@@ -76,4 +85,9 @@ void CTestRifle::Update(float &a_delta)
 {
 	m_CoolDownTimer->Update();
 	
+}
+
+void CTestRifle::EjectShell()
+{
+
 }

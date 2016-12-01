@@ -14,6 +14,8 @@
 #include <string.h>
 #include "src\Timer.h"
 #include "src\Squad.h"
+#include "src\TextureManager.h"
+#include "Texture.h"
 
 bool bForceApplied = false;
 bool bSpawned = false;
@@ -48,6 +50,7 @@ AIEphysApp::~AIEphysApp()
 
 bool AIEphysApp::startup()
 {
+
 	BombTimer.Start(1.0);
 	m_uiEntityCounter = 0;
 	srand(time(NULL));
@@ -56,8 +59,14 @@ bool AIEphysApp::startup()
 	m_Font = new aie::Font("./font/consolas.ttf", 16);
 	m_PhysScene = new PhysScene(-9.8, 1.0 / 60.0);
 
+	//aie::Texture *tt = new aie::Texture("./Images/Map/Terrain/stock_snowy_concrete_seamless.png");
+	m_TextureManager = new CTextureManager(500);
+	testTextureID = m_TextureManager->LoadTexture("./Images/Map/Terrain/stock_snowy_concrete_seamless.png");
+
 	std::cout << "Creating Animation..." << std::endl;
 	ptrAnim = new CAnimation("./Images/Effects/explosion_stock.png", 16, 4, 4, 12.0f, 128, 128);
+	ptrAnim->m_Position = glm::vec2(300, 300);
+	ptrAnim->m_Rotation = 0;
 	ptrAnim->SetLoop(false);
 	std::cout << "Done" << std::endl;
 
@@ -156,7 +165,10 @@ void AIEphysApp::draw()
 		m_2dRenderer->drawText(m_Font, text.c_str(), 0, 600);
 	}
 	
-	
+	m_2dRenderer->setUVRect(0, 0, 1, 1);
+	m_2dRenderer->drawSprite(m_TextureManager->GetTextureByID(testTextureID), 600, 500, 64, 64);
+	m_2dRenderer->drawSprite(m_TextureManager->GetTextureByID(testTextureID), 600, 564, 64, 64);
+
 	ptrEntity->Draw(m_2dRenderer);
 	if (ptrEntity->GetCurrectWaypoint() != glm::vec2(0))
 	{
@@ -171,7 +183,10 @@ void AIEphysApp::draw()
 	}
 
 	testSquad->Draw(m_2dRenderer);
-
+	m_2dRenderer->setRenderColour(1, 1, 1, 0.1f);
+	m_2dRenderer->drawCircle(ptrAnim->m_Position.x, ptrAnim->m_Position.y, 20);
+	m_2dRenderer->setRenderColour(1, 1, 1, 1);
+	ptrAnim->Draw(m_2dRenderer);
 	// done drawing sprites
 	m_2dRenderer->end();
 	//m_PhysScene->ClearCollisionList();
@@ -201,4 +216,15 @@ float AIEphysApp::DegToRad(float a_degrees)
 float AIEphysApp::RadToDeg(float a_radians)
 {
 	return (a_radians * 57.2958) + 90.0f;
+}
+
+unsigned int AIEphysApp::HashString(std::string a_str)
+{
+	unsigned int hash = 0;
+	for (int i = 0; i < a_str.size(); ++i)
+	{
+		int val = (int)a_str[i];
+		hash = (hash * 256 + val) % m_TextureManager->GetTableSize();
+	}
+	return hash;
 }

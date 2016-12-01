@@ -14,6 +14,7 @@ public:
 	void Fire(CBaseEntity* a_target) override;
 	void OnReload() override;
 	void Update(float &a_delta) override;
+	void EjectShell() override;
 private:
 };
 
