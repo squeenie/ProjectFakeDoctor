@@ -108,13 +108,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIEphysApp.h" />
+    <ClInclude Include="src\AlertBox.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\BaseEntity.h" />
+    <ClInclude Include="src\BaseUIElement.h" />
+    <ClInclude Include="src\CBaseBuilding.h" />
     <ClInclude Include="src\Circle.h" />
+    <ClInclude Include="src\CSquare.h" />
     <ClInclude Include="src\Emitter.h" />
     <ClInclude Include="src\EntityTypes.h" />
     <ClInclude Include="src\Force.h" />
     <ClInclude Include="src\Item.h" />
+    <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\PhysicsObject.h" />
     <ClInclude Include="src\PhysScene.h" />
@@ -126,6 +131,7 @@
     <ClInclude Include="src\TextureManager.h" />
     <ClInclude Include="src\Tile.h" />
     <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\UIManager.h" />
     <ClInclude Include="src\Weapon.h" />
     <ClInclude Include="TestProjectile.h" />
   </ItemGroup>

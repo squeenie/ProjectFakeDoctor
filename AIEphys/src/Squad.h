@@ -7,6 +7,11 @@
 class CBaseEntity;
 enum eEntityType;
 
+enum eFormation
+{
+
+};
+
 namespace aie
 {
 	class Renderer2D;

@@ -4,11 +4,16 @@
 #include "Timer.h"
 #include "Animation.h"
 #include "TestRifle.h"
+#include "..\AIEphysApp.h"
+#include "TextureManager.h"
+
+extern AIEphysApp* app;
 
 TestEntity::TestEntity()
 {
 	m_EntityType = ENTITY_TEST_RIFLEMAN;
-	m_Texture = new aie::Texture("./Images/stock_infantry.png");
+	m_TextureID = app->GetTextureManager()->LoadTexture("./Images/stock_infantry.png");
+	//m_Texture = new aie::Texture("./Images/stock_infantry.png");
 	m_CooldownTimer = new CTimer();
 	m_DieAnim = nullptr;
 	m_RunAnim = nullptr;
@@ -19,7 +24,7 @@ TestEntity::TestEntity()
 	m_PreviousState = STATE_UNINITIALIZED;
 	m_MainWeapon = new CTestRifle();
 	m_MainWeapon->SetParent(this);
-	
+	m_SecondsToReload = 3.0f;
 }
 
 TestEntity::~TestEntity()
@@ -29,6 +34,7 @@ TestEntity::~TestEntity()
 
 void TestEntity::Update(float &a_delta)
 {
+	m_PreviousState = m_State;
 	if (m_CurrentHP < 0)
 	{
 		m_bAlive = false;
@@ -67,7 +73,7 @@ void TestEntity::Update(float &a_delta)
 		float newAngle = DegToRad(270.0f - angle);
 		SetRotation(newAngle);
 	}
-	m_PreviousState = m_State;
+	
 }
 
 void TestEntity::Draw(aie::Renderer2D* a_renderer/*, float &a_delta*/)
@@ -201,8 +207,16 @@ void TestEntity::Flee(glm::vec2 &a_target, float &a_delta)
 
 void TestEntity::Reload(float &a_delta)
 {
-	m_State = STATE_RELOAD;
-	m_ReloadTimer->Start(m_SecondsToReload);
+	if (m_State != STATE_RELOAD)
+	{
+		m_State = STATE_RELOAD;
+		m_ReloadTimer->Start(m_SecondsToReload);
+	}
+	else
+	{
+		m_ReloadTimer->Update();
+	}
+	
 }
 
 void TestEntity::DrawHealth(aie::Renderer2D* a_renderer)
@@ -236,12 +250,15 @@ void TestEntity::DrawMuzzle(aie::Renderer2D* a_renderer)
 	{
 		return;
 	}
-	glm::vec2 dir = glm::normalize(m_Targets.at(0)->m_Position - m_Position);
-	m_MainWeapon->GetMuzzleAnimation()->m_Position = m_Position + (dir * 30.0f);
+	else
+	{
+		glm::vec2 dir = glm::normalize(m_Targets.at(0)->m_Position - m_Position);
+		m_MainWeapon->GetMuzzleAnimation()->m_Position = m_Position + (dir * 30.0f);
 
-	float angle = RadToDeg(VectorToAngle(dir));
-	angle = DegToRad(90.0f - angle);
+		float angle = RadToDeg(VectorToAngle(dir));
+		angle = DegToRad(90.0f - angle);
 
-	m_MainWeapon->GetMuzzleAnimation()->m_Rotation = angle;
-	m_MainWeapon->GetMuzzleAnimation()->Draw(a_renderer);
+		m_MainWeapon->GetMuzzleAnimation()->m_Rotation = angle;
+		m_MainWeapon->GetMuzzleAnimation()->Draw(a_renderer);
+	}
 }

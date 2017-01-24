@@ -203,6 +203,11 @@ glm::vec2 AIEphysApp::GetRandomDirection()
 	return glm::normalize(tmp);
 }
 
+CTextureManager* AIEphysApp::GetTextureManager()
+{
+	return m_TextureManager;
+}
+
 float AIEphysApp::VectorToAngle(glm::vec2 a_angle)
 {
 	return atan2(a_angle.x, a_angle.y);

@@ -22,6 +22,8 @@ public:
 	virtual void		draw();
 
 	glm::vec2			GetRandomDirection();
+	CTextureManager*	GetTextureManager();
+
 	float				VectorToAngle(glm::vec2 a_angle);
 	float				DegToRad(float a_degrees);
 	float				RadToDeg(float a_radians);

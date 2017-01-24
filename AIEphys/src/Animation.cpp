@@ -2,10 +2,15 @@
 #include "texture.h"
 #include "Timer.h"
 #include "Renderer2D.h"
+#include "..\AIEphysApp.h"
+#include "TextureManager.h"
+
+extern AIEphysApp* app;
 
 CAnimation::CAnimation(const char * a_texture, unsigned int a_numFrames, unsigned int a_numFramesAcross, unsigned int a_numFramesDown, float a_frameRate, float a_width, float a_height)
 {
-	m_Texture = new aie::Texture(a_texture);
+	m_TextureID = app->GetTextureManager()->LoadTexture(a_texture);
+	m_Texture = app->GetTextureManager()->GetTextureByID(m_TextureID);
 	m_Position = glm::vec2(0);
 	m_TotalFrames = a_numFrames;
 	m_FrameRate = a_frameRate;

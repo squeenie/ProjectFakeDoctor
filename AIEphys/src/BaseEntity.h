@@ -114,6 +114,7 @@ protected:
 	double						m_SecondsToReload;
 	bool						m_bUpdate;
 	bool						m_bAlive;
+	unsigned int				m_TextureID;
 	aie::Texture*				m_Texture;
 	std::vector<CItem*>			m_Inventory;
 	std::vector<glm::vec2>		m_WayPoints;

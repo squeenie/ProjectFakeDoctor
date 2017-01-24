@@ -55,6 +55,7 @@ private:
 	unsigned int			m_TotalFrames;
 	unsigned int			m_NumFramesAcross;
 	unsigned int			m_NumFramesDown;
+	unsigned int			m_TextureID;
 	float					m_FrameRate;
 	std::string				m_FileName;
 	aie::Texture*			m_Texture;
